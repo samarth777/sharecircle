@@ -1,38 +1,39 @@
-import Head from 'next/head';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
+import { useState, useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 
-function Search() {
+function Resource() {
+  const [donations, setDonations] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const donationRef = collection(db, "organisations");
+      const data = await getDocs(donationRef);
+      const dataArray = data.docs.map((doc) => doc.data());
+      setDonations(dataArray);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
-      <Head>
-        <title>ShareCircle | Search</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Header />
+      <h1>Organisations</h1>
+      <div class="donations">
+        {donations.map((donation, index) => (
+          <div class="donation-card" key={index}>
+            <p class="name">Name: {donation.name}</p>
+            <p class="category">Category: {donation.category}</p>
+            <p class="description">Description: {donation.description}</p>
+          </div>
+        ))}
+      </div>
 
-      <main>
-        <h1>Search for Organizations</h1>
-        <form>
-          <label htmlFor="location">Location:</label>
-          <input type="text" id="location" name="location" required />
-          
-          <label htmlFor="category">Category:</label>
-          <select id="category" name="category">
-            <option value="">Select a category</option>
-            <option value="food">Food</option>
-            <option value="clothing">Clothing</option>
-            <option value="housing">Housing</option>
-            <option value="employment">Employment</option>
-          </select>
-
-          <button type="submit">Search</button>
-        </form>
-        <p>Results will be displayed here.</p>
-      </main>
       <Footer />
     </div>
   );
 }
 
-export default Search;
+export default Resource;
