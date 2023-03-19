@@ -5,7 +5,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 function Resource() {
-  const [donations, setDonations] = useState([]);
+  const [donations, setDonations] = useState<never[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
