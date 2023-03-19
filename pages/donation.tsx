@@ -3,6 +3,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { FormEvent } from 'react';
 
 function Donations() {
   const [name, setName] = useState("");
@@ -14,9 +15,8 @@ function Donations() {
   // const [image, setImage] = useState("");
 
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
     try {
       const donationRef = collection(db, "donations");
       const newDonation = {
